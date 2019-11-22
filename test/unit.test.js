@@ -16,7 +16,7 @@ describe('unit.test.js', () => {
             return 0;
         }
         if (a.age < b.age) {
-            return 1;
+            return -1;
         }
     };
 
@@ -48,7 +48,22 @@ describe('unit.test.js', () => {
                 comparator
             );
             assert.strictEqual(after.length, basicArraySize + 1);
-            assert.strictEqual(after[0].age, 100);
+            assert.strictEqual(after.pop().age, 100);
+        });
+        it('should be equal to normal sort', () => {
+            const items = new Array(10)
+                .fill(0)
+                .map(() => generateItem(AsyncTestUtil.randomNumber(10, 1000)));
+            const normalSorted = items.sort(comparator);
+            let own = [];
+            items.forEach(item => {
+                own = pushAtSortPosition(
+                    own,
+                    item,
+                    comparator
+                );
+            });
+            assert.deepStrictEqual(normalSorted, own);
         });
     });
     describe('performance', () => {

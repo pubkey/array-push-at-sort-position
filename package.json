@@ -14,12 +14,12 @@
   "scripts": {
     "lint": "eslint src test",
     "preversion": "npm run lint && npm run test",
-    "build:es6": "rimraf -rf dist/es && cross-env NODE_ENV=es6 babel src --out-dir dist/es",
+    "build:es6": "cross-env NODE_ENV=es6 babel src --out-dir dist/es",
     "build:es5": "cross-env NODE_ENV=es5 babel src --out-dir dist/lib",
     "build:test": "cross-env NODE_ENV=es5 babel test --out-dir test_tmp",
-    "build": "npm run clear && concurrently \"npm run build:es6\" \"npm run build:es5\" \"npm run build:test\"",
+    "build": "npm run clear && npm run build:es6 && npm run build:es5 && npm run build:test",
     "clear": "rimraf -rf ./dist",
-    "test": "npm run build & mocha ./test_tmp/unit.test.js"
+    "test": "npm run build && mocha ./test_tmp/unit.test.js"
   },
   "repository": {
     "type": "git",
@@ -45,7 +45,6 @@
     "assert": "2.0.0",
     "async-test-util": "1.7.3",
     "browserify": "16.5.0",
-    "concurrently": "4.1.2",
     "cross-env": "6.0.0",
     "eslint": "6.4.0",
     "mocha": "6.2.0",

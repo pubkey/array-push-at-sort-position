@@ -1,0 +1,7 @@
+/babel.config.js
+/test/
+/test_tmp/
+.eslintignore
+.eslintrc.json
+renovate.json
+.travis.yml

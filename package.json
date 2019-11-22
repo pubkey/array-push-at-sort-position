@@ -1,0 +1,55 @@
+{
+  "name": "array-push-at-sort-position",
+  "description": "Push items to an array at their correct sort-position",
+  "version": "1.0.0",
+  "author": "pubkey",
+  "license": "Apache-2.0",
+  "keywords": [
+    "array",
+    "push",
+    "sort",
+    "insert",
+    "binary-search"
+  ],
+  "scripts": {
+    "lint": "eslint src test",
+    "preversion": "npm run lint && npm run test",
+    "build:es6": "rimraf -rf dist/es && cross-env NODE_ENV=es6 babel src --out-dir dist/es",
+    "build:es5": "cross-env NODE_ENV=es5 babel src --out-dir dist/lib",
+    "build:test": "cross-env NODE_ENV=es5 babel test --out-dir test_tmp",
+    "build": "npm run clear && concurrently \"npm run build:es6\" \"npm run build:es5\" \"npm run build:test\"",
+    "clear": "rimraf -rf ./dist",
+    "test": "npm run build & mocha ./test_tmp/unit.test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pubkey/array-push-at-sort-position.git"
+  },
+  "pre-commit": [
+    "lint"
+  ],
+  "main": "./dist/lib/index.js",
+  "module": "./dist/es/index.js",
+  "types": "./src/index.d.ts",
+  "devDependencies": {
+    "@babel/cli": "7.6.2",
+    "@babel/core": "7.6.2",
+    "@babel/plugin-check-constants": "7.0.0-beta.38",
+    "@babel/plugin-proposal-object-rest-spread": "7.6.2",
+    "@babel/plugin-transform-member-expression-literals": "7.2.0",
+    "@babel/plugin-transform-property-literals": "7.2.0",
+    "@babel/plugin-transform-runtime": "7.6.2",
+    "@babel/polyfill": "7.6.0",
+    "@babel/preset-env": "7.6.2",
+    "@babel/types": "7.6.1",
+    "assert": "2.0.0",
+    "async-test-util": "1.7.3",
+    "browserify": "16.5.0",
+    "concurrently": "4.1.2",
+    "cross-env": "6.0.0",
+    "eslint": "6.4.0",
+    "mocha": "6.2.0",
+    "pre-commit": "1.2.2",
+    "rimraf": "3.0.0"
+  }
+}

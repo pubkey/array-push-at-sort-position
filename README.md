@@ -8,7 +8,7 @@ Push items to an array at their correct sort-position which is much faster then 
 
 ```typescript
 
-// instead of pushing a re-sorting like this:
+// instead of pushing and resorting like this:
 const arrayWithNewItems = arrayWithItems.slice();
 arrayWithNewItems.push(newItem);
 arrayWithNewItems = arrayWithNewItems.sort(sortComparator);

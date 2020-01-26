@@ -1,7 +1,7 @@
 {
   "name": "array-push-at-sort-position",
   "description": "Push items to an array at their correct sort-position",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "author": "pubkey",
   "license": "Apache-2.0",
   "keywords": [

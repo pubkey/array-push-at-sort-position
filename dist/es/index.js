@@ -1,47 +1,40 @@
 /**
- * @link https://github.com/aaditmshah/sorted-array/blob/master/sorted-array.js#L11
+ * copied from npm 'binary-search-insert'
+ * @link https://www.npmjs.com/package/binary-search-insert
  */
 export function pushAtSortPosition(array, item, compareFunction) {
-  array = array.slice();
-  var high = array.length - 1;
+  var ret = array.slice();
+  var high = ret.length - 1;
   var low = 0;
-  var pos = -1;
-  var index;
-  var ordering; // The array is sorted. You must find the position of new element in O(log(n)), not O(n).
+  var mid = 0;
 
-  while (high >= low) {
-    index = (high + low) / 2 >>> 0;
-    ordering = compareFunction(array[index], item);
-    if (ordering < 0) low = index + 1;else if (ordering > 0) high = index - 1;else {
-      pos = index;
-      break;
+  if (ret.length === 0) {
+    ret.push(item);
+    return ret;
+  }
+
+  while (low <= high) {
+    // https://github.com/darkskyapp/binary-search
+    // http://googleresearch.blogspot.com/2006/06/extra-extra-read-all-about-it-nearly.html
+    mid = low + (high - low >> 1);
+
+    var _cmp = compareFunction(ret[mid], item);
+
+    if (_cmp <= 0.0) {
+      // searching too low
+      low = mid + 1;
+    } else {
+      // searching too high
+      high = mid - 1;
     }
   }
 
-  if (pos === -1) {
-    // if element was not found, high < low.
-    pos = high;
-  } // This assures that equal elements inserted after will be in a higher position in array.
-  // They can be equal for comparison purposes, but different objects with different data.
-  // Respecting the chronological order can be important for many applications.
+  var cmp = compareFunction(ret[mid], item);
 
-
-  pos++;
-  high = array.length - 1;
-
-  while (pos < high && compareFunction(item, array[pos]) === 0) {
-    pos++;
+  if (cmp <= 0.0) {
+    mid++;
   }
 
-  index = array.length; // Just to increase array size.
-
-  array.push(item); // Much faster. No need to elements swap.
-
-  while (index > pos) {
-    array[index] = array[--index];
-  } // Set the new element on its correct position.
-
-
-  array[pos] = item;
-  return array;
+  ret.splice(mid, 0, item);
+  return ret;
 }

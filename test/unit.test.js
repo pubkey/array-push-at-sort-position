@@ -2,6 +2,11 @@ const assert = require('assert');
 const AsyncTestUtil = require('async-test-util');
 const pushAtSortPosition = require('../').pushAtSortPosition;
 
+
+const elapsedTime = before => {
+    return AsyncTestUtil.performanceNow() - before;
+};
+
 describe('unit.test.js', () => {
     const generateItem = (age = AsyncTestUtil.randomNumber()) => ({
         name: AsyncTestUtil.randomString(),
@@ -21,9 +26,9 @@ describe('unit.test.js', () => {
     };
 
     const basicArraySize = 40;
-    const basicArray = () => {
+    const basicArray = (size = basicArraySize) => {
         let t = 9;
-        return new Array(basicArraySize).fill(0).map(() => {
+        return new Array(size).fill(0).map(() => {
             t++;
             return generateItem(t);
         });
@@ -89,6 +94,35 @@ describe('unit.test.js', () => {
             );
             assert.ok(after);
             assert.ok(c < 10);
+        });
+        it('should be faster then insert-and-sort', () => {
+            const amount = 1000;
+
+            // run insert-and-sort
+            let sortedArray = [];
+            const itemsToInsert = basicArray(amount);
+            const startTime1 = AsyncTestUtil.performanceNow();
+            itemsToInsert.forEach(item => {
+                sortedArray.push(item);
+                sortedArray = sortedArray.sort(comparator);
+            });
+            const elapsed1 = elapsedTime(startTime1);
+
+            // run pushAtSortPosition
+            let sortedArray2 = [];
+            const startTime2 = AsyncTestUtil.performanceNow();
+            itemsToInsert.forEach(item => {
+                sortedArray2 = pushAtSortPosition(
+                    sortedArray2,
+                    item,
+                    comparator
+                );
+            });
+            const elapsed2 = elapsedTime(startTime2);
+
+            console.log('time for insert-and-sort: ' + elapsed1 + 'ms');
+            console.log('time for pushAtSortPosition: ' + elapsed2 + 'ms');
+            assert.ok(elapsed1 > (elapsed2 * 2));
         });
     });
     describe('other', () => {

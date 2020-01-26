@@ -1,52 +1,42 @@
 /**
- * @link https://github.com/aaditmshah/sorted-array/blob/master/sorted-array.js#L11
+ * copied from npm 'binary-search-insert'
+ * @link https://www.npmjs.com/package/binary-search-insert
  */
 export function pushAtSortPosition(
     array,
     item,
     compareFunction
 ) {
-    array = array.slice();
+    const ret = array.slice();
 
-    let high = array.length - 1;
+    let high = ret.length - 1;
     let low = 0;
-    let pos = -1;
-    let index;
-    let ordering;
+    let mid = 0;
 
-    // The array is sorted. You must find the position of new element in O(log(n)), not O(n).
-    while (high >= low) {
-        index = (high + low) / 2 >>> 0;
-        ordering = compareFunction(array[index], item);
-        if (ordering < 0) low = index + 1;
-        else if (ordering > 0) high = index - 1;
-        else {
-            pos = index;
-            break;
+    if (ret.length === 0) {
+        ret.push(item);
+        return ret;
+    }
+
+    while (low <= high) {
+        // https://github.com/darkskyapp/binary-search
+        // http://googleresearch.blogspot.com/2006/06/extra-extra-read-all-about-it-nearly.html
+        mid = low + (high - low >> 1);
+        const _cmp = compareFunction(ret[mid], item);
+        if (_cmp <= 0.0) {
+            // searching too low
+            low = mid + 1;
+        } else {
+            // searching too high
+            high = mid - 1;
         }
     }
 
-    if (pos === -1) {
-        // if element was not found, high < low.
-        pos = high;
+    const cmp = compareFunction(ret[mid], item);
+    if (cmp <= 0.0) {
+        mid++;
     }
-    // This assures that equal elements inserted after will be in a higher position in array.
-    // They can be equal for comparison purposes, but different objects with different data.
-    // Respecting the chronological order can be important for many applications.
-    pos++;
-    high = array.length - 1;
-    while ((pos < high) && (compareFunction(item, array[pos]) === 0)) {
-        pos++;
-    }
-    index = array.length;
-    // Just to increase array size.
-    array.push(item);
-    // Much faster. No need to elements swap.
-    while (index > pos) {
-        array[index] = array[--index];
-    }
-    // Set the new element on its correct position.
-    array[pos] = item;
 
-    return array;
+    ret.splice(mid, 0, item);
+    return ret;
 }

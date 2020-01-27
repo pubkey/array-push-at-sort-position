@@ -122,7 +122,7 @@ describe('unit.test.js', () => {
 
             console.log('time for insert-and-sort: ' + elapsed1 + 'ms');
             console.log('time for pushAtSortPosition: ' + elapsed2 + 'ms');
-            assert.ok(elapsed1 > (elapsed2 * 2));
+            assert.ok(elapsed1 > (elapsed2 * 1.1));
         });
     });
     describe('other', () => {

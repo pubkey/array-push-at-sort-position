@@ -135,6 +135,16 @@ describe('unit.test.js', () => {
             );
             assert.ok(before !== after);
         });
+        it('should only mutate the input when noCopy set', () => {
+            const before = basicArray();
+            const after = pushAtSortPosition(
+                before,
+                generateItem(100),
+                comparator,
+                true
+            );
+            assert.ok(before === after);
+        });
     });
 
 });

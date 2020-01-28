@@ -5,9 +5,10 @@
 export function pushAtSortPosition(
     array,
     item,
-    compareFunction
+    compareFunction,
+    noCopy
 ) {
-    const ret = array.slice();
+    const ret = noCopy ? array : array.slice();
 
     let high = ret.length - 1;
     let low = 0;

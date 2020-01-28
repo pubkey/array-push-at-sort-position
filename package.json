@@ -49,6 +49,6 @@
     "eslint": "6.8.0",
     "mocha": "6.2.2",
     "pre-commit": "1.2.2",
-    "rimraf": "3.0.0"
+    "rimraf": "3.0.1"
   }
 }

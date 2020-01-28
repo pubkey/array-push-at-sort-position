@@ -2,8 +2,8 @@
  * copied from npm 'binary-search-insert'
  * @link https://www.npmjs.com/package/binary-search-insert
  */
-export function pushAtSortPosition(array, item, compareFunction) {
-  var ret = array.slice();
+export function pushAtSortPosition(array, item, compareFunction, noCopy) {
+  var ret = noCopy ? array : array.slice();
   var high = ret.length - 1;
   var low = 0;
   var mid = 0;

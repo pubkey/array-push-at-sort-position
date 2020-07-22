@@ -45,7 +45,7 @@
     "assert": "2.0.0",
     "async-test-util": "1.7.3",
     "browserify": "16.5.1",
-    "cross-env": "6.0.3",
+    "cross-env": "7.0.2",
     "eslint": "7.5.0",
     "mocha": "8.0.1",
     "pre-commit": "1.2.2",

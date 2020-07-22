@@ -2,7 +2,7 @@
 
 Push items to an array at their correct sort-position which is much faster then re-sorting the array.
 
-Adding an item to an array with `push()` and `sort()` has `O(log(n))`
+Adding an item to an array with `push()` and `sort()` has `O(n*log(n))`
 while inserting the item at the correct sort-position has `O(n)`.
 
 ```bash

@@ -44,7 +44,7 @@
     "@babel/types": "7.11.0",
     "assert": "2.0.0",
     "async-test-util": "1.7.3",
-    "browserify": "16.5.1",
+    "browserify": "16.5.2",
     "cross-env": "7.0.2",
     "eslint": "7.6.0",
     "mocha": "8.1.0",

@@ -12,12 +12,12 @@ while inserting the item at the correct sort-position has `O(n)`.
 ```typescript
 
 // instead of pushing and resorting like this:
-const arrayWithNewItems = arrayWithItems.slice();
-arrayWithNewItems.push(newItem);
-arrayWithNewItems = arrayWithNewItems.sort(sortComparator);
+const arrayWithItems = arrayWithItems.slice();
+arrayWithItems.push(newItem);
+const arrayWithNewItems = arrayWithItems.sort(sortComparator);
 
 // you can push the newItem directly into the correct sorting position
-const arrayWithNewItems = pushAtSortPosition(
+const [arrayWithNewItems, insertPosition] = pushAtSortPosition(
   arrayWithItems,
   newItem,
   sortComparator

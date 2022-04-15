@@ -38,15 +38,15 @@ describe('unit.test.js', () => {
         it('insert at first', () => {
             const size = 10;
             const before = basicArray(size);
-            const ret = pushAtSortPosition(
+            const [after, position] = pushAtSortPosition(
                 before,
                 generateItem(1),
                 comparator
             );
 
-            assert.strictEqual(ret.position, 0);
-            assert.strictEqual(ret.array.length, size + 1);
-            assert.strictEqual(ret.array[0].age, 1);
+            assert.strictEqual(position, 0);
+            assert.strictEqual(after.length, size + 1);
+            assert.strictEqual(after[0].age, 1);
         });
         it('insert at middle', () => {
             const size = 10;
@@ -57,18 +57,18 @@ describe('unit.test.js', () => {
                     items,
                     generateItem(idx + 200),
                     comparator
-                ).array;
+                )[0];
             });
 
-            const ret = pushAtSortPosition(
+            const [after, position] = pushAtSortPosition(
                 items,
                 generateItem(100),
                 comparator
             );
 
-            assert.strictEqual(ret.position, size);
-            assert.strictEqual(ret.array.length, (size * 2) + 1);
-            assert.ok(ret.array.pop().age > 100);
+            assert.strictEqual(position, size);
+            assert.strictEqual(after.length, (size * 2) + 1);
+            assert.ok(after.pop().age > 100);
         });
         it('insert at last', () => {
             const size = 10;
@@ -79,9 +79,9 @@ describe('unit.test.js', () => {
                 comparator
             );
 
-            assert.strictEqual(ret.position, size);
-            assert.strictEqual(ret.array.length, size + 1);
-            assert.strictEqual(ret.array.pop().age, 100);
+            assert.strictEqual(ret[1], size);
+            assert.strictEqual(ret[0].length, size + 1);
+            assert.strictEqual(ret[0].pop().age, 100);
         });
         it('should be equal to normal sort', () => {
             const items = new Array(10)
@@ -90,11 +90,12 @@ describe('unit.test.js', () => {
             const normalSorted = items.sort(comparator);
             let own = [];
             items.forEach(item => {
-                own = pushAtSortPosition(
+                const oneRet = pushAtSortPosition(
                     own,
                     item,
                     comparator
-                ).array;
+                );
+                own = oneRet[0];
             });
             assert.deepStrictEqual(normalSorted, own);
         });
@@ -119,7 +120,7 @@ describe('unit.test.js', () => {
                 before,
                 generateItem(100),
                 comparatorCount
-            ).array;
+            )[0];
             assert.ok(after);
             assert.ok(c < 10);
         });
@@ -144,7 +145,7 @@ describe('unit.test.js', () => {
                     sortedArray2,
                     item,
                     comparator
-                ).array;
+                )[0];
             });
             const elapsed2 = elapsedTime(startTime2);
 
@@ -160,7 +161,7 @@ describe('unit.test.js', () => {
                 before,
                 generateItem(100),
                 comparator
-            ).array;
+            )[0];
             assert.ok(before !== after);
         });
         it('should only mutate the input when noCopy set', () => {
@@ -170,7 +171,7 @@ describe('unit.test.js', () => {
                 generateItem(100),
                 comparator,
                 true
-            ).array;
+            )[0];
             assert.ok(before === after);
         });
     });

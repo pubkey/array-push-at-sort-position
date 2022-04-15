@@ -19,10 +19,7 @@ export function pushAtSortPosition(
      */
     if (ret.length === 0) {
         ret.push(item);
-        return {
-            array: ret,
-            position: 0
-        };
+        return [ret, 0];
     }
 
     while (low <= high) {
@@ -45,8 +42,5 @@ export function pushAtSortPosition(
     }
 
     ret.splice(mid, 0, item);
-    return {
-        array: ret,
-        position: mid
-    };
+    return [ret, mid];
 }

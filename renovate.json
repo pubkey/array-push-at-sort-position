@@ -3,16 +3,14 @@
         "config:base"
     ],
     "statusCheckVerify": true,
-    "ignoreDeps": [
-        "node",
-        "webpack"
-    ],
+    "ignoreDeps": [],
     "automerge": true,
     "major": {
-        "automerge": false
+        "automerge": true
     },
     "ignorePaths": [],
     "rebaseStalePrs": true,
-    "prHourlyLimit": 4,
+    "prHourlyLimit": 2,
+    "prCreation": "not-pending",
     "dependencyDashboard": false
 }

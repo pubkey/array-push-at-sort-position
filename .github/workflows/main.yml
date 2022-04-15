@@ -15,8 +15,10 @@ jobs:
         with:
           node-version: 17.8.0
       - name: install
-        run: npm install
+        run: npm install --legacy-peer-deps --no-audit
       - name: build
         run: npm run build
       - name: test
         run: npm run test
+      - name: lint
+        run: npm run lint

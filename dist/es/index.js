@@ -1,5 +1,5 @@
 /**
- * copied from npm 'binary-search-insert'
+ * copied and adapted from npm 'binary-search-insert'
  * @link https://www.npmjs.com/package/binary-search-insert
  */
 export function pushAtSortPosition(array, item, compareFunction, noCopy) {
@@ -15,15 +15,21 @@ export function pushAtSortPosition(array, item, compareFunction, noCopy) {
     ret.push(item);
     return [ret, 0];
   }
+  /**
+   * So we do not have to ghet the ret[mid] doc again
+   * at the last we store it here.
+   */
+
+
+  var lastMidDoc;
 
   while (low <= high) {
     // https://github.com/darkskyapp/binary-search
     // http://googleresearch.blogspot.com/2006/06/extra-extra-read-all-about-it-nearly.html
     mid = low + (high - low >> 1);
+    lastMidDoc = ret[mid];
 
-    var _cmp = compareFunction(ret[mid], item);
-
-    if (_cmp <= 0.0) {
+    if (compareFunction(lastMidDoc, item) <= 0.0) {
       // searching too low
       low = mid + 1;
     } else {
@@ -32,11 +38,13 @@ export function pushAtSortPosition(array, item, compareFunction, noCopy) {
     }
   }
 
-  var cmp = compareFunction(ret[mid], item);
-
-  if (cmp <= 0.0) {
+  if (compareFunction(lastMidDoc, item) <= 0.0) {
     mid++;
   }
+  /**
+   * Insert at correct position
+   */
+
 
   ret.splice(mid, 0, item);
   return [ret, mid];

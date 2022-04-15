@@ -84,10 +84,10 @@ describe('unit.test.js', () => {
             assert.strictEqual(ret[0].pop().age, 100);
         });
         it('should be equal to normal sort', () => {
-            const items = new Array(10)
+            const items = new Array(100)
                 .fill(0)
                 .map(() => generateItem(AsyncTestUtil.randomNumber(10, 1000)));
-            const normalSorted = items.sort(comparator);
+            const normalSorted = items.slice(0).sort(comparator);
             let own = [];
             items.forEach(item => {
                 const oneRet = pushAtSortPosition(

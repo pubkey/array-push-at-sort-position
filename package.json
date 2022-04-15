@@ -46,7 +46,7 @@
     "async-test-util": "2.0.0",
     "browserify": "16.5.2",
     "cross-env": "7.0.3",
-    "eslint": "7.12.0",
+    "eslint": "8.13.0",
     "mocha": "8.1.1",
     "pre-commit": "1.2.2",
     "rimraf": "3.0.2"

@@ -3,14 +3,20 @@
  * @link https://www.npmjs.com/package/binary-search-insert
  */
 export function pushAtSortPosition(array, item, compareFunction, noCopy) {
-  var ret = noCopy ? array : array.slice();
+  var ret = noCopy ? array : array.slice(0);
   var high = ret.length - 1;
   var low = 0;
   var mid = 0;
+  /**
+   * Optimization shortcut.
+   */
 
   if (ret.length === 0) {
     ret.push(item);
-    return ret;
+    return {
+      array: ret,
+      position: 0
+    };
   }
 
   while (low <= high) {
@@ -36,5 +42,8 @@ export function pushAtSortPosition(array, item, compareFunction, noCopy) {
   }
 
   ret.splice(mid, 0, item);
-  return ret;
+  return {
+    array: ret,
+    position: mid
+  };
 }

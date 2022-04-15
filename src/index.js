@@ -8,15 +8,21 @@ export function pushAtSortPosition(
     compareFunction,
     noCopy
 ) {
-    const ret = noCopy ? array : array.slice();
+    const ret = noCopy ? array : array.slice(0);
 
     let high = ret.length - 1;
     let low = 0;
     let mid = 0;
 
+    /**
+     * Optimization shortcut.
+     */
     if (ret.length === 0) {
         ret.push(item);
-        return ret;
+        return {
+            array: ret,
+            position: 0
+        };
     }
 
     while (low <= high) {
@@ -39,5 +45,8 @@ export function pushAtSortPosition(
     }
 
     ret.splice(mid, 0, item);
-    return ret;
+    return {
+        array: ret,
+        position: mid
+    };
 }

@@ -1,7 +1,7 @@
 {
   "name": "array-push-at-sort-position",
   "description": "Push items to an array at their correct sort-position",
-  "version": "1.2.0",
+  "version": "2.0.0",
   "author": "pubkey",
   "license": "Apache-2.0",
   "keywords": [
@@ -19,7 +19,7 @@
     "build:test": "cross-env NODE_ENV=es5 babel test --out-dir test_tmp",
     "build": "npm run clear && npm run build:es6 && npm run build:es5 && npm run build:test",
     "clear": "rimraf -rf ./dist",
-    "test": "npm run build && mocha ./test_tmp/unit.test.js"
+    "test": "npm run build && mocha ./test_tmp/unit.test.js --bail"
   },
   "repository": {
     "type": "git",

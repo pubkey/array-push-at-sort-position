@@ -124,8 +124,10 @@ describe('unit.test.js', () => {
             assert.ok(after);
             assert.ok(c < 10);
         });
-        it('should be faster then insert-and-sort', () => {
-            const amount = 1000;
+        it('should be faster then insert-and-sort', function () {
+            this.timeout(20000);
+
+            const amount = 3000;
 
             // run insert-and-sort
             let sortedArray = [];
@@ -144,7 +146,8 @@ describe('unit.test.js', () => {
                 sortedArray2 = pushAtSortPosition(
                     sortedArray2,
                     item,
-                    comparator
+                    comparator,
+                    true
                 )[0];
             });
             const elapsed2 = elapsedTime(startTime2);

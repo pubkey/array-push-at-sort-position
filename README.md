@@ -17,12 +17,23 @@ arrayWithItems.push(newItem);
 const arrayWithNewItems = arrayWithItems.sort(sortComparator);
 
 // you can push the newItem directly into the correct sorting position
-const [arrayWithNewItems, insertPosition] = pushAtSortPosition(
+const insertPosition = pushAtSortPosition(
   arrayWithItems,
   newItem,
-  sortComparator
+  sortComparator,
+  /**
+   * Start lowest index
+   * Use 0 by default. If you use this method to merge sorted arrays, you might
+   * use a  higher value if you know that the newItem will not be positioned before that index.
+   */
+  0
 );
 ```
+
+### Imporant
+
+- Calling `pushAtSortPosition` will not copy the array. It will mutate the input array. Call `array.slice(0)` on the input
+if you do not want the original array to be mutated.
 
 ### See also
 

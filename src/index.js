@@ -6,21 +6,19 @@ export function pushAtSortPosition(
     array,
     item,
     compareFunction,
-    noCopy
+    low
 ) {
-    const ret = noCopy ? array : array.slice(0);
     const length = array.length;
 
     let high = length - 1;
-    let low = 0;
     let mid = 0;
 
     /**
      * Optimization shortcut.
      */
     if (length === 0) {
-        ret.push(item);
-        return [ret, 0];
+        array.push(item);
+        return 0;
     }
 
     /**
@@ -33,7 +31,7 @@ export function pushAtSortPosition(
         // https://github.com/darkskyapp/binary-search
         // http://googleresearch.blogspot.com/2006/06/extra-extra-read-all-about-it-nearly.html
         mid = low + (high - low >> 1);
-        lastMidDoc = ret[mid];
+        lastMidDoc = array[mid];
         if (compareFunction(lastMidDoc, item) <= 0.0) {
             // searching too low
             low = mid + 1;
@@ -50,7 +48,7 @@ export function pushAtSortPosition(
     /**
      * Insert at correct position
      */
-    ret.splice(mid, 0, item);
+    array.splice(mid, 0, item);
 
-    return [ret, mid];
+    return mid;
 }

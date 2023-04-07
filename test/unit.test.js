@@ -6,24 +6,26 @@ const pushAtSortPosition = require('../').pushAtSortPosition;
 const elapsedTime = before => {
     return AsyncTestUtil.performanceNow() - before;
 };
+let compareCallCount = 0;
+function comparator(a, b) {
+    compareCallCount = compareCallCount + 1;
+    if (a.age > b.age) {
+        return 1;
+    }
+    if (a.age === b.age) {
+        return 0;
+    }
+    if (a.age < b.age) {
+        return -1;
+    }
+}
 
 describe('unit.test.js', () => {
-    const generateItem = (age = AsyncTestUtil.randomNumber()) => ({
+    const generateItem = (age = AsyncTestUtil.randomNumber(1, 10000)) => ({
         name: AsyncTestUtil.randomString(),
         age
     });
 
-    const comparator = (a, b) => {
-        if (a.age > b.age) {
-            return 1;
-        }
-        if (a.age === b.age) {
-            return 0;
-        }
-        if (a.age < b.age) {
-            return -1;
-        }
-    };
 
     const basicArraySize = 40;
     const basicArray = (size = basicArraySize) => {
@@ -38,64 +40,69 @@ describe('unit.test.js', () => {
         it('insert at first', () => {
             const size = 10;
             const before = basicArray(size);
-            const [after, position] = pushAtSortPosition(
+            const position = pushAtSortPosition(
                 before,
                 generateItem(1),
-                comparator
+                comparator,
+                0
             );
 
             assert.strictEqual(position, 0);
-            assert.strictEqual(after.length, size + 1);
-            assert.strictEqual(after[0].age, 1);
+            assert.strictEqual(before.length, size + 1);
+            assert.strictEqual(before[0].age, 1);
         });
         it('insert at middle', () => {
             const size = 10;
-            let items = basicArray(size);
+            const items = basicArray(size);
 
             new Array(size).fill(0).forEach((_v, idx) => {
-                items = pushAtSortPosition(
+                pushAtSortPosition(
                     items,
                     generateItem(idx + 200),
-                    comparator
+                    comparator,
+                    0
                 )[0];
             });
 
-            const [after, position] = pushAtSortPosition(
+            const position = pushAtSortPosition(
                 items,
                 generateItem(100),
-                comparator
+                comparator,
+                0
             );
 
             assert.strictEqual(position, size);
-            assert.strictEqual(after.length, (size * 2) + 1);
-            assert.ok(after.pop().age > 100);
+            assert.strictEqual(items.length, (size * 2) + 1);
+            assert.ok(items.pop().age > 100);
         });
         it('insert at last', () => {
             const size = 10;
-            const before = basicArray(size);
-            const ret = pushAtSortPosition(
-                before,
+            const array = basicArray(size);
+            const position = pushAtSortPosition(
+                array,
                 generateItem(100),
-                comparator
+                comparator,
+                0
             );
 
-            assert.strictEqual(ret[1], size);
-            assert.strictEqual(ret[0].length, size + 1);
-            assert.strictEqual(ret[0].pop().age, 100);
+            assert.strictEqual(position, size);
+            assert.strictEqual(array.length, size + 1);
+            assert.strictEqual(array.pop().age, 100);
         });
         it('should be equal to normal sort', () => {
             const items = new Array(100)
                 .fill(0)
                 .map(() => generateItem(AsyncTestUtil.randomNumber(10, 1000)));
             const normalSorted = items.slice(0).sort(comparator);
-            let own = [];
+
+            const own = [];
             items.forEach(item => {
-                const oneRet = pushAtSortPosition(
+                pushAtSortPosition(
                     own,
                     item,
-                    comparator
+                    comparator,
+                    0
                 );
-                own = oneRet[0];
             });
             assert.deepStrictEqual(normalSorted, own);
         });
@@ -115,13 +122,14 @@ describe('unit.test.js', () => {
                     return 1;
                 }
             };
-            const before = basicArray();
-            const after = pushAtSortPosition(
-                before,
+            const array = basicArray();
+            pushAtSortPosition(
+                array,
                 generateItem(100),
-                comparatorCount
-            )[0];
-            assert.ok(after);
+                comparatorCount,
+                0
+            );
+            assert.ok(array);
             assert.ok(c < 10);
         });
         it('should be faster then insert-and-sort', function () {
@@ -140,15 +148,15 @@ describe('unit.test.js', () => {
             const elapsed1 = elapsedTime(startTime1);
 
             // run pushAtSortPosition
-            let sortedArray2 = [];
+            const sortedArray2 = [];
             const startTime2 = AsyncTestUtil.performanceNow();
             itemsToInsert.forEach(item => {
-                sortedArray2 = pushAtSortPosition(
+                pushAtSortPosition(
                     sortedArray2,
                     item,
                     comparator,
-                    true
-                )[0];
+                    0
+                );
             });
             const elapsed2 = elapsedTime(startTime2);
 
@@ -156,27 +164,35 @@ describe('unit.test.js', () => {
             console.log('time for pushAtSortPosition: ' + elapsed2 + 'ms');
             assert.ok(elapsed1 > (elapsed2 * 1.1));
         });
-    });
-    describe('other', () => {
-        it('should not have mutated the input', () => {
-            const before = basicArray();
-            const after = pushAtSortPosition(
-                before,
-                generateItem(100),
-                comparator
-            )[0];
-            assert.ok(before !== after);
-        });
-        it('should only mutate the input when noCopy set', () => {
-            const before = basicArray();
-            const after = pushAtSortPosition(
-                before,
-                generateItem(100),
-                comparator,
-                true
-            )[0];
-            assert.ok(before === after);
-        });
-    });
+        it('merge sorted arrays', function () {
+            this.timeout(20000);
 
+            const amount = 20000;
+
+            const baseArray = basicArray(amount).sort(comparator);
+            const onTopArray = basicArray(amount).sort(comparator);
+
+
+            const compareCountBefore = compareCallCount;
+
+            const startTime = performance.now();
+            let lastLow = 0;
+            let t = 0;
+            while (t < amount) {
+                const item = onTopArray[t];
+                lastLow = pushAtSortPosition(
+                    baseArray,
+                    item,
+                    comparator,
+                    lastLow
+                );
+                t++;
+            }
+            const elapsed = elapsedTime(startTime);
+            const compareCounts = compareCallCount - compareCountBefore;
+            console.log('time for "merge sorted arrays": ' + elapsed + 'ms');
+            console.log('compareCounts: ' + compareCounts);
+            // console.dir(baseArray);
+        });
+    });
 });

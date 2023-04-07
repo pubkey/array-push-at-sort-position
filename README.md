@@ -30,7 +30,7 @@ const insertPosition = pushAtSortPosition(
 );
 ```
 
-### Imporant
+### Important
 
 - Calling `pushAtSortPosition` will not copy the array. It will mutate the input array. Call `array.slice(0)` on the input
 if you do not want the original array to be mutated.

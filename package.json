@@ -9,7 +9,8 @@
     "push",
     "sort",
     "insert",
-    "binary-search"
+    "binary-search",
+    "sorting"
   ],
   "scripts": {
     "lint": "eslint src test",

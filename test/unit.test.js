@@ -167,7 +167,7 @@ describe('unit.test.js', () => {
         it('merge sorted arrays', function () {
             this.timeout(20000);
 
-            const amount = 20000;
+            const amount = 80000;
 
             const baseArray = basicArray(amount).sort(comparator);
             const onTopArray = basicArray(amount).sort(comparator);
@@ -185,7 +185,7 @@ describe('unit.test.js', () => {
                     item,
                     comparator,
                     lastLow
-                );
+                ) + 1;
                 t++;
             }
             const elapsed = elapsedTime(startTime);
@@ -193,6 +193,7 @@ describe('unit.test.js', () => {
             console.log('time for "merge sorted arrays": ' + elapsed + 'ms');
             console.log('compareCounts: ' + compareCounts);
             // console.dir(baseArray);
+
         });
     });
 });

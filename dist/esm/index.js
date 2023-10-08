@@ -16,7 +16,7 @@ export function pushAtSortPosition(array, item, compareFunction, low) {
   }
 
   /**
-   * So we do not have to ghet the ret[mid] doc again
+   * So we do not have to get the ret[mid] doc again
    * at the last we store it here.
    */
   var lastMidDoc;

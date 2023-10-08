@@ -1,7 +1,7 @@
 {
   "name": "array-push-at-sort-position",
   "description": "Push items to an array at their correct sort-position",
-  "version": "3.0.0",
+  "version": "4.0.0",
   "author": "pubkey",
   "license": "Apache-2.0",
   "keywords": [
@@ -10,13 +10,15 @@
     "sort",
     "insert",
     "binary-search",
-    "sorting"
+    "sorting",
+    "binary-insert",
+    "indexing"
   ],
   "scripts": {
     "lint": "eslint src test",
     "preversion": "npm run lint && npm run test",
-    "build:es6": "cross-env NODE_ENV=es6 babel src --out-dir dist/es",
-    "build:es5": "cross-env NODE_ENV=es5 babel src --out-dir dist/lib",
+    "build:es6": "cross-env NODE_ENV=es6 babel src --out-dir dist/esm && echo '{ \"type\": \"module\" }' > dist/esm/package.json",
+    "build:es5": "cross-env NODE_ENV=es5 babel src --out-dir dist/cjs",
     "build:test": "cross-env NODE_ENV=es5 babel test --out-dir test_tmp",
     "build": "npm run clear && npm run build:es6 && npm run build:es5 && npm run build:test",
     "clear": "rimraf -rf ./dist",
@@ -29,8 +31,18 @@
   "pre-commit": [
     "lint"
   ],
-  "main": "./dist/lib/index.js",
-  "module": "./dist/es/index.js",
+  "exports": {
+    ".": {
+      "default": {
+        "types": "./src/index.d.ts",
+        "import": "./dist/esm/index.js",
+        "default": "./dist/cjs/index.es5.js"
+      }
+    },
+    "./package.json": "./package.json"
+  },
+  "main": "./dist/cjs/index.es5.js",
+  "module": "./dist/esm/index.js",
   "types": "./src/index.d.ts",
   "devDependencies": {
     "@babel/cli": "7.23.0",

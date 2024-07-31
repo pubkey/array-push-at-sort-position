@@ -53,7 +53,7 @@
     "@babel/plugin-transform-property-literals": "7.24.7",
     "@babel/plugin-transform-runtime": "7.24.7",
     "@babel/polyfill": "7.12.1",
-    "@babel/preset-env": "7.25.2",
+    "@babel/preset-env": "7.25.3",
     "@babel/types": "7.25.2",
     "assert": "2.1.0",
     "async-test-util": "2.5.0",

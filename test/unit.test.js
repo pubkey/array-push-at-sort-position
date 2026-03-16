@@ -108,6 +108,121 @@ describe('unit.test.js', () => {
         });
     });
     describe('performance', () => {
+        /**
+         * Original unoptimized implementation for comparison.
+         */
+        function pushAtSortPositionOriginal(
+            array,
+            item,
+            compareFunction,
+            low
+        ) {
+            const length = array.length;
+            let high = length - 1;
+            let mid = 0;
+            if (length === 0) {
+                array.push(item);
+                return 0;
+            }
+            let lastMidDoc;
+            while (low <= high) {
+                mid = low + (high - low >> 1);
+                lastMidDoc = array[mid];
+                if (compareFunction(lastMidDoc, item) <= 0.0) {
+                    low = mid + 1;
+                } else {
+                    high = mid - 1;
+                }
+            }
+            if (compareFunction(lastMidDoc, item) <= 0.0) {
+                mid++;
+            }
+            array.splice(mid, 0, item);
+            return mid;
+        }
+
+        it('should be faster than the original implementation with sequential data', function () {
+            this.timeout(20000);
+
+            const amount = 10000;
+            const itemsToInsert = basicArray(amount);
+
+            // run original implementation
+            const sortedArray1 = [];
+            const startTime1 = AsyncTestUtil.performanceNow();
+            itemsToInsert.forEach(item => {
+                pushAtSortPositionOriginal(
+                    sortedArray1,
+                    item,
+                    comparator,
+                    0
+                );
+            });
+            const elapsed1 = elapsedTime(startTime1);
+
+            // run optimized implementation
+            const sortedArray2 = [];
+            const startTime2 = AsyncTestUtil.performanceNow();
+            itemsToInsert.forEach(item => {
+                pushAtSortPosition(
+                    sortedArray2,
+                    item,
+                    comparator,
+                    0
+                );
+            });
+            const elapsed2 = elapsedTime(startTime2);
+
+            // verify both produce the same result
+            assert.deepStrictEqual(sortedArray1, sortedArray2);
+
+            console.log('--- Sequential data (' + amount + ' items) ---');
+            console.log('time for original pushAtSortPosition: ' + elapsed1 + 'ms');
+            console.log('time for optimized pushAtSortPosition: ' + elapsed2 + 'ms');
+            console.log('speedup: ' + (elapsed1 / elapsed2).toFixed(2) + 'x faster');
+        });
+        it('should be faster than the original implementation with random data', function () {
+            this.timeout(20000);
+
+            const amount = 10000;
+            const itemsToInsert = new Array(amount)
+                .fill(0)
+                .map(() => generateItem(AsyncTestUtil.randomNumber(1, 100000)));
+
+            // run original implementation
+            const sortedArray1 = [];
+            const startTime1 = AsyncTestUtil.performanceNow();
+            itemsToInsert.forEach(item => {
+                pushAtSortPositionOriginal(
+                    sortedArray1,
+                    item,
+                    comparator,
+                    0
+                );
+            });
+            const elapsed1 = elapsedTime(startTime1);
+
+            // run optimized implementation
+            const sortedArray2 = [];
+            const startTime2 = AsyncTestUtil.performanceNow();
+            itemsToInsert.forEach(item => {
+                pushAtSortPosition(
+                    sortedArray2,
+                    item,
+                    comparator,
+                    0
+                );
+            });
+            const elapsed2 = elapsedTime(startTime2);
+
+            // verify both produce the same result
+            assert.deepStrictEqual(sortedArray1, sortedArray2);
+
+            console.log('--- Random data (' + amount + ' items) ---');
+            console.log('time for original pushAtSortPosition: ' + elapsed1 + 'ms');
+            console.log('time for optimized pushAtSortPosition: ' + elapsed2 + 'ms');
+            console.log('speedup: ' + (elapsed1 / elapsed2).toFixed(2) + 'x faster');
+        });
         it('should use less compare-runs then full sort', () => {
             let c = 0;
             const comparatorCount = (a, b) => {

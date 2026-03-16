@@ -9,9 +9,7 @@ export function pushAtSortPosition(
     low
 ) {
     const length = array.length;
-
     let high = length - 1;
-    let mid = 0;
 
     /**
      * Optimization shortcut.
@@ -22,17 +20,31 @@ export function pushAtSortPosition(
     }
 
     /**
-     * So we do not have to get the ret[mid] doc again
-     * at the last we store it here.
+     * Optimization shortcut.
+     * Item belongs at the end, use push() which is O(1)
+     * instead of splice() which is O(n).
      */
-    let lastMidDoc;
+    if (compareFunction(array[high], item) <= 0.0) {
+        array.push(item);
+        return length;
+    }
 
+    /**
+     * Optimization shortcut.
+     * Item belongs before the current low index,
+     * so we can skip the binary search.
+     */
+    if (compareFunction(array[low], item) > 0.0) {
+        array.splice(low, 0, item);
+        return low;
+    }
+
+    let mid = 0;
     while (low <= high) {
         // https://github.com/darkskyapp/binary-search
         // http://googleresearch.blogspot.com/2006/06/extra-extra-read-all-about-it-nearly.html
         mid = low + (high - low >> 1);
-        lastMidDoc = array[mid];
-        if (compareFunction(lastMidDoc, item) <= 0.0) {
+        if (compareFunction(array[mid], item) <= 0.0) {
             // searching too low
             low = mid + 1;
         } else {
@@ -41,16 +53,11 @@ export function pushAtSortPosition(
         }
     }
 
-    if (compareFunction(lastMidDoc, item) <= 0.0) {
-        mid++;
-    }
-
-
-
     /**
-     * Insert at correct position
+     * Insert at correct position.
+     * After binary search, low is the correct insertion index.
      */
-    array.splice(mid, 0, item);
+    array.splice(low, 0, item);
 
-    return mid;
+    return low;
 }

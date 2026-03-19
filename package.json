@@ -22,7 +22,8 @@
     "build:test": "cross-env NODE_ENV=es5 babel test --out-dir test_tmp",
     "build": "npm run clear && npm run build:es6 && npm run build:es5 && npm run build:test",
     "clear": "rimraf -rf ./dist",
-    "test": "npm run build && mocha ./test_tmp/unit.test.js --bail"
+    "test": "npm run build && mocha ./test_tmp/unit.test.js --bail",
+    "perf": "npm run build && node ./test_tmp/performance.js"
   },
   "repository": {
     "type": "git",

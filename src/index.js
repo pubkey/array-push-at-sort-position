@@ -42,7 +42,7 @@ export function pushAtSortPosition(
     while (low <= high) {
         // https://github.com/darkskyapp/binary-search
         // http://googleresearch.blogspot.com/2006/06/extra-extra-read-all-about-it-nearly.html
-        const mid = (low + high) >>> 1;
+        const mid = low + ((high - low) >>> 1);
         if (compareFunction(array[mid], item) <= 0) {
             // searching too low
             low = mid + 1;

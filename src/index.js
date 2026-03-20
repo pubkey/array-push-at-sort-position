@@ -39,7 +39,7 @@ export function pushAtSortPosition(
         return low;
     }
 
-    let mid = 0;
+    let mid;
     while (low <= high) {
         // https://github.com/darkskyapp/binary-search
         // http://googleresearch.blogspot.com/2006/06/extra-extra-read-all-about-it-nearly.html

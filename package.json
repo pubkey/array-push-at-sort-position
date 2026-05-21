@@ -60,7 +60,7 @@
     "browserify": "17.0.1",
     "cross-env": "10.1.0",
     "eslint": "8.57.1",
-    "mocha": "11.7.5",
+    "mocha": "11.7.6",
     "pre-commit": "2.0.0",
     "rimraf": "6.1.3"
   }
